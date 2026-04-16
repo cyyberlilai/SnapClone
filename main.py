@@ -17,6 +17,10 @@ import re
 
 app = FastAPI(title="SnapClone Professional API")
 
+# --- PROXY CONFIGURATION ---
+GLOBAL_PROXY = "http://36.137.90.163:8081" 
+
+
 # Mount static files for the frontend
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -41,7 +45,16 @@ def build_video_ydl_opts(
         "noplaylist": True,
         "format": BEST_VIDEO_FORMAT,
         "merge_output_format": "mp4",
+        "http_headers": {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'en-us,en;q=0.5',
+            'Sec-Fetch-Mode': 'navigate',
+        }
     }
+    
+    if GLOBAL_PROXY:
+        opts["proxy"] = GLOBAL_PROXY
 
     if download:
         if not outtmpl:
@@ -413,8 +426,19 @@ def run_batch_thumbnail_download(batch_id: str, urls: list):
     total_urls = len(urls)
     
     try:
+        common_opts = {
+            'quiet': True, 
+            'extract_flat': False,
+            'http_headers': {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+                'Referer': 'https://www.bilibili.com/',
+            }
+        }
+        if GLOBAL_PROXY:
+            common_opts["proxy"] = GLOBAL_PROXY
+            
         with zipfile.ZipFile(zip_path, 'w') as zipf:
-            with yt_dlp.YoutubeDL({'quiet': True, 'extract_flat': False}) as ydl:
+            with yt_dlp.YoutubeDL(common_opts) as ydl:
                 for index, url in enumerate(urls):
                     current_idx = index + 1
                     progress_data[batch_id].update({
@@ -444,3 +468,9 @@ def run_batch_thumbnail_download(batch_id: str, urls: list):
         })
     except Exception as e:
         progress_data[batch_id].update({"status": "error", "msg": str(e)})
+
+/{batch_id}"
+        })
+    except Exception as e:
+        progress_data[batch_id].update({"status": "error", "msg": str(e)})
+pdate({"status": "error", "msg": str(e)})
