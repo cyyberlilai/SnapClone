@@ -1,0 +1,22 @@
+# Python 虚拟环境
+venv/
+__pycache__/
+*.pyc
+
+# 敏感数据与本地配置
+fb_info.json
+.DS_Store
+.env
+
+# 临时下载目录
+downloads/
+*.mp4
+*.mkv
+*.webm
+*.zip
+*.part
+*.ytdl
+
+# IDE 配置文件
+.vscode/
+.idea/

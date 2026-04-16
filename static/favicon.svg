@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="mccainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+  </defs>
+  
+  <g transform="translate(50, 50) scale(1.25) translate(-50, -50)">
+    <!-- Camera body in McCain Yellow/Amber gradient -->
+    <path d="M 20 35 L 35 35 L 40 20 L 60 20 L 65 35 L 80 35 A 5 5 0 0 1 85 40 L 85 75 A 5 5 0 0 1 80 80 L 20 80 A 5 5 0 0 1 15 75 L 15 40 A 5 5 0 0 1 20 35 Z" fill="url(#mccainGrad)" />
+    
+    <!-- Symbols in McCain Charcoal Black -->
+    <path d="M 50 43 L 50 67 M 38 55 L 50 67 L 62 55" fill="none" stroke="#18181b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="75" cy="48" r="4" fill="#18181b" />
+  </g>
+</svg>

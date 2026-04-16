@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="title">SnapClone - 专业万能视频解析下载</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=4">
+    <link rel="stylesheet" href="/static/style.css">
+    <script>
+        (function() {
+            const theme = localStorage.getItem('snapclone_theme') || 'light';
+            if (theme === 'dark') document.documentElement.classList.add('dark-mode');
+        })();
+    </script>
+    <script src="/static/i18n.js"></script>
+</head>
+<body>
+    <!-- Background Ethereal Blobs -->
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Professional Sticky Navbar -->
+    <nav class="navbar">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; padding-top: 0; padding-bottom: 0; height: 80px;">
+            <a href="/" class="logo-area" style="text-decoration: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style="width: 40px; height: 40px;">
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fde047" />
+                            <stop offset="100%" stop-color="#f59e0b" />
+                        </linearGradient>
+                    </defs>
+                    <g transform="translate(50, 50) scale(1.2) translate(-50, -50)">
+                        <path d="M 20 35 L 35 35 L 40 20 L 60 20 L 65 35 L 80 35 A 5 5 0 0 1 85 40 L 85 75 A 5 5 0 0 1 80 80 L 20 80 A 5 5 0 0 1 15 75 L 15 40 A 5 5 0 0 1 20 35 Z" fill="url(#logoGrad)" />
+                        <path d="M 50 43 L 50 67 M 38 55 L 50 67 L 62 55" fill="none" stroke="#18181b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="75" cy="48" r="4" fill="#18181b" />
+                    </g>
+                </svg>
+                <span class="logo-text">SnapClone</span>
+            </a>
+            
+            <div style="display: flex; gap: 1.5rem;">
+                <button id="themeToggleBtn" data-i18n-tooltip="toggleTheme" data-tooltip="切换主题" style="background: none; border: none; cursor: pointer; font-size: 1.5rem; color: var(--text-main); transition: transform 0.2s;" onmouseover="this.style.transform='rotate(15deg)'" onmouseout="this.style.transform='rotate(0deg)'">
+                    <span id="themeIcon">☀️</span>
+                </button>
+                <button id="langToggleBtn" data-i18n-tooltip="switchLanguage" data-tooltip="切换语言" style="background: none; border: none; cursor: pointer; color: var(--text-main); padding: 0;">
+                    <div class="lang-icon-wrapper">
+                        <div id="langBoxPrimary" class="lang-box primary">中</div>
+                        <div id="langBoxSecondary" class="lang-box secondary">En</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 data-i18n="title">SnapClone</h1>
+            <p data-i18n="subtitle">支持 1000+ 平台的万能无水印视频/图片解析下载工具</p>
+        </section>
+
+        <!-- Main Extraction Tool -->
+        <section class="main-search-card">
+            <div class="input-wrapper">
+                <div style="padding-left: 1.5rem; display: flex; align-items: center; color: var(--text-muted);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                </div>
+                <input type="text" id="urlInput" data-i18n-placeholder="inputPlaceholder" placeholder="在此粘贴视频、图片或网页链接...">
+                <button id="extractBtn" class="btn-hero">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span data-i18n="extractBtn">解析链接</span>
+                </button>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loading" class="hidden" style="text-align: center; margin-top: 3rem;">
+                <div class="loading-spinner" style="margin: 0 auto; width: 40px; height: 40px; border-width: 4px;"></div>
+                <p data-i18n="parsingLoading" style="color: var(--text-muted); margin-top: 1.5rem; font-weight: 500;">正在解析资源，请稍候...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="error" class="hidden error-msg" style="margin-top: 2rem;"></div>
+
+            <!-- Result Display Area -->
+            <div id="result" class="hidden">
+                <div style="height: 1px; background: var(--border); margin: 3rem 0;"></div>
+                <div class="media-display">
+                    <img id="thumbnail" class="thumb-preview" src="" alt="Thumbnail">
+                    <div style="flex: 1;">
+                        <h2 id="mediaTitle" style="font-size: 1.75rem; margin-bottom: 2rem; line-height: 1.3;"></h2>
+                        <div style="display: flex; gap: 1.5rem;">
+                            <a id="dlVideoBtn" href="#" target="_blank" class="dl-btn btn-red" data-i18n="previewDownloadBtn">下载原视频</a>
+                            <a id="dlThumbnailBtn" href="#" target="_blank" rel="noopener noreferrer" class="dl-btn btn-blue" download data-i18n="dlThumbnailBtn">下载封面图片</a>
+                        </div>
+                        <p data-i18n="downloadHint" style="font-size: 0.9rem; color: var(--text-muted); margin-top: 2rem; line-height: 1.8;"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pro Tools Grid -->
+        <section class="tools-grid">
+            <!-- Batch Thumbnails -->
+            <div class="tool-card glass-card">
+                <h2 data-i18n="batchThumbTitle">
+                    <svg class="tool-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    批量下载封面 (TXT)
+                </h2>
+                <p data-i18n="batchThumbDesc" style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6;"></p>
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div class="custom-file-input">
+                        <label for="batchFileInput" class="file-label">
+                            <span data-i18n="chooseFile">选择文件</span>
+                        </label>
+                        <span id="fileNameThumb" class="file-name" data-i18n="noFileChosen">未选择文件</span>
+                        <input type="file" id="batchFileInput" accept=".txt" style="display: none;">
+                    </div>
+                    <button id="batchDownloadBtn" class="dl-btn btn-amber" style="width: 100%; justify-content: center;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="14" rx="2" ry="2"></rect><path d="M7 21h14a2 2 0 0 0 2-2V7"></path><polyline points="3 13 8 8 13 13"></polyline><circle cx="7" cy="7" r="1"></circle><path d="M17 12v5"></path><path d="m15 15 2 2 2-2"></path></svg>
+                        <span data-i18n="batchThumbBtn">批量下载封面 ZIP</span>
+                    </button>
+                </div>
+                
+                <!-- Thumbnail Progress Panel -->
+                <div id="batchThumbProgressPanel" class="hidden" style="margin-top: 2rem;">
+                    <div class="progress-container">
+                        <div class="progress-header">
+                            <span id="thumbProgressStatusText" data-i18n="statusDownloading">Downloading...</span>
+                            <span id="thumbProgressPercentText">0%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div id="thumbProgressFill" class="progress-fill"></div>
+                        </div>
+                    </div>
+                    <p id="thumbProgressDetailMsg" style="font-size: 0.8rem; color: var(--primary); font-weight: 700; margin-top: 1rem; text-align: center;"></p>
+                </div>
+
+                <div id="batchError" class="hidden error-msg" style="margin-top: 1.5rem; font-size: 0.9rem;"></div>
+            </div>
+
+            <!-- Batch Videos -->
+            <div class="tool-card glass-card">
+                <h2 data-i18n="batchVideoTitle">
+                    <svg class="tool-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    批量下载视频 (TXT)
+                </h2>
+                <p data-i18n="batchVideoDesc" style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6;"></p>
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div class="custom-file-input">
+                        <label for="batchVideoFileInput" class="file-label">
+                            <span data-i18n="chooseFile">选择文件</span>
+                        </label>
+                        <span id="fileNameVideo" class="file-name" data-i18n="noFileChosen">未选择文件</span>
+                        <input type="file" id="batchVideoFileInput" accept=".txt" style="display: none;">
+                    </div>
+                    <button id="batchVideoDownloadBtn" class="dl-btn btn-red" style="width: 100%; justify-content: center;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"></path><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect><path d="M1 9h15"></path><path d="M1 15h15"></path><path d="M8 13v-4"></path><path d="m6 11 2 2 2-2"></path></svg>
+                        <span data-i18n="batchVideoBtn">批量下载视频 ZIP</span>
+                    </button>
+                </div>
+
+                <!-- Video Progress Panel -->
+                <div id="batchVideoProgressPanel" class="hidden" style="margin-top: 2rem;">
+                    <div class="progress-container">
+                        <div class="progress-header">
+                            <span id="progressStatusText" data-i18n="statusDownloading">Downloading...</span>
+                            <span id="progressPercentText">0%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div id="progressFill" class="progress-fill"></div>
+                        </div>
+                        <div class="progress-stats">
+                            <span id="progressSpeedText" data-i18n="labelSpeed">Speed: 0 KB/s</span>
+                            <span id="progressETAText" data-i18n="labelETA">ETA: --:--</span>
+                        </div>
+                    </div>
+                    <p id="progressDetailMsg" style="font-size: 0.8rem; color: var(--primary); font-weight: 700; margin-top: 1rem; text-align: center;"></p>
+                </div>
+
+                <div id="batchVideoError" class="hidden error-msg" style="margin-top: 1.5rem; font-size: 0.9rem;"></div>
+            </div>
+        </section>
+    </div>
+    <script src="/static/script.js?v=5"></script>
+</body>
+</html>
