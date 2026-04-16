@@ -37,7 +37,7 @@
 ### 2. 安装与运行
 ```bash
 # 克隆项目
-git clone https://github.com/您的用户名/SnapClone.git
+git clone https://github.com/cyyberlilai/SnapClone.git
 cd SnapClone
 
 # 创建并激活虚拟环境
